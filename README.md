@@ -5,7 +5,7 @@
 </div>
 <br>
 
-> Default theme for [Oh My Fish][omf-link].
+> A simple theme for [Oh My Fish][omf-link] on my machine (hostname: miracle).
 
 ## Install
 
@@ -16,8 +16,9 @@ $ omf theme default
 ## Features
 
 * All the things you need to know about Git in a glance.
-* A subtle timestamp hanging out off to the right.
+* User and host indication on the right side
 * Previous command status.
+* Prompt on new line
 
 ## Screenshot
 
@@ -37,19 +38,15 @@ Display `git stash` indicator:
   set -g theme_stash_indicator yes
 ```
 
-Do not display `user@hostname` when in an SSH session:
-```
-  set -g theme_ignore_ssh_awareness yes
-```
-
 # License
 
 [MIT][mit] © [bpinto][author] et [al][contributors]
 
 
 [mit]:            http://opensource.org/licenses/MIT
+[author]:         http://github.com/tflori
 [author]:         http://github.com/bpinto
-[contributors]:   https://github.com/oh-my-fish/theme-default/graphs/contributors
+[contributors]:   https://github.com/oh-my-fish/theme-default/graphs/contributors 
 [omf-link]:       https://www.github.com/oh-my-fish/oh-my-fish
 
 [license-badge]:  https://img.shields.io/badge/license-MIT-007EC7.svg?style=flat-square
