@@ -13,18 +13,19 @@ function fish_prompt
     set cwd (prompt_pwd)
   end
 
-  set -f ahead    "↑"
-  set -f behind   "↓"
-  set -f diverged "⥄"
-  set -f dirty    "⨯"
-  set -f stash    "≡"
-  set -f none     "◦"
+  set -f ahead    "+"
+  set -f behind   "-"
+  set -f diverged "±"
+  set -f dirty    "…"
+  set -f stash    "^"
+  set -f none     ""
 
   set -f normal_color     (set_color normal)
   set -f success_color    (set_color white)
   set -f error_color      (set_color $fish_color_error 2> /dev/null; or set_color red --bold)
   set -f directory_color  (set_color $fish_color_quote 2> /dev/null; or set_color brown)
-  set -f repository_color (set_color $fish_color_cwd 2> /dev/null; or set_color green)
+  set -f repository_color (set_color $fish_color_cwdo 2> /dev/null; or set_color green)
+  set -f flag_color (set_color magenta)
 
 
   if test $last_command_status -eq 0
@@ -43,23 +44,21 @@ function fish_prompt
     end
 
     echo -n -s "[ " $directory_color $cwd $normal_color " ]"
-    echo -n -s $repository_color "  " (git_branch_name) $normal_color " "
 
+    echo -n -s $repository_color "  "
 
-    set -l list
     if test "$theme_stash_indicator" = yes; and git_is_stashed
-      set list $list $stash
+      echo -n -s $flag_color $stash
     end
-    if git_is_touched
-      set list $list $dirty
-    end
-    echo -n $list
+    echo -n -s $repository_color (git_branch_name) $flag_color
 
-    if test -z "$list"
-      echo -n -s (git_ahead $ahead $behind $diverged $none)
+    echo -n -s (git_ahead $ahead $behind $diverged $none) $normal_color
+
+    if git_is_touched
+      echo -n $dirty
     end
   else
-    echo -n -s " " $directory_color $cwd $normal_color
+    echo -n -s "[ " $directory_color $cwd $normal_color " ]"
   end
 
   #echo -n -s -e "\n$status_color╰❯$normal_color "
