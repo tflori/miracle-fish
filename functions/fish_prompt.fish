@@ -4,8 +4,8 @@
 #  set -g theme_stash_indicator yes
 
 function fish_prompt
-  set -l last_command_status $status
-  set -l cwd
+  set -f last_command_status $status
+  set -f cwd
 
   if test "$theme_short_path" = 'yes'
     set cwd (basename (prompt_pwd))
@@ -13,37 +13,37 @@ function fish_prompt
     set cwd (prompt_pwd)
   end
 
-  set -l fish     " ❯"
-  set -l ahead    "↑"
-  set -l behind   "↓"
-  set -l diverged "⥄"
-  set -l dirty    "⨯"
-  set -l stash    "≡"
-  set -l none     "◦"
+  set -f ahead    "↑"
+  set -f behind   "↓"
+  set -f diverged "⥄"
+  set -f dirty    "⨯"
+  set -f stash    "≡"
+  set -f none     "◦"
 
-  set -l normal_color     (set_color normal)
-  set -l success_color    (set_color cyan)
-  set -l error_color      (set_color $fish_color_error 2> /dev/null; or set_color red --bold)
-  set -l directory_color  (set_color $fish_color_quote 2> /dev/null; or set_color brown)
-  set -l repository_color (set_color $fish_color_cwd 2> /dev/null; or set_color green)
+  set -f normal_color     (set_color normal)
+  set -f success_color    (set_color white)
+  set -f error_color      (set_color $fish_color_error 2> /dev/null; or set_color red --bold)
+  set -f directory_color  (set_color $fish_color_quote 2> /dev/null; or set_color brown)
+  set -f repository_color (set_color $fish_color_cwd 2> /dev/null; or set_color green)
 
-  set -l prompt_string $fish
 
   if test $last_command_status -eq 0
-    echo -n -s $success_color $prompt_string $normal_color
+    set -f status_color $success_color
   else
-    echo -n -s $error_color $prompt_string $normal_color
+    set -f status_color $error_color
   end
+  #echo -n -s $status_color "╭" $normal_color
+  echo -n -s $status_color "┌" $normal_color
 
   if git_is_repo
     if test "$theme_short_path" = 'yes'
-      set root_folder (command git rev-parse --show-toplevel 2> /dev/null)
-      set parent_root_folder (dirname $root_folder)
-      set cwd (echo $PWD | sed -e "s|$parent_root_folder/||")
+      set -f root_folder (command git rev-parse --show-toplevel 2> /dev/null)
+      set -f parent_root_folder (dirname $root_folder)
+      set -f cwd (echo $PWD | sed -e "s|$parent_root_folder/||")
     end
 
-    echo -n -s " " $directory_color $cwd $normal_color
-    echo -n -s " on " $repository_color (git_branch_name) $normal_color " "
+    echo -n -s "[ " $directory_color $cwd $normal_color " ]"
+    echo -n -s $repository_color "  " (git_branch_name) $normal_color " "
 
 
     set -l list
@@ -62,5 +62,6 @@ function fish_prompt
     echo -n -s " " $directory_color $cwd $normal_color
   end
 
-  echo -n -s -e "\n ❯ "
+  #echo -n -s -e "\n$status_color╰❯$normal_color "
+  echo -n -s -e "\n$status_color└❯$normal_color "
 end
