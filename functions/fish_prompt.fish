@@ -25,7 +25,7 @@ function fish_prompt
   set -f error_color      (set_color $fish_color_error 2> /dev/null; or set_color red --bold)
   set -f directory_color  (set_color $fish_color_quote 2> /dev/null; or set_color brown)
   set -f repository_color (set_color $fish_color_cwdo 2> /dev/null; or set_color green)
-  set -f flag_color (set_color magenta)
+  set -f flag_color (set_color red --dim)
 
 
   if test $last_command_status -eq 0
