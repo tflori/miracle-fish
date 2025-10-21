@@ -19,18 +19,24 @@ function fish_prompt
   set -f dirty    "…"
   set -f stash    "^"
   set -f none     ""
+  set -f host_prefix ""
 
   set -f normal_color     (set_color normal)
   set -f success_color    (set_color white)
   set -f error_color      (set_color $fish_color_error 2> /dev/null; or set_color red --bold)
   set -f directory_color  (set_color $fish_color_quote 2> /dev/null; or set_color brown)
   set -f repository_color (set_color $fish_color_cwdo 2> /dev/null; or set_color green)
-  set -f hostname_color   (set_color cyan --bold)
+  set -f hostname_color   (set_color yellow --bold)
   set -f flag_color (set_color red --dim)
 
-  set -f host_prefix ""
+  if fish_is_root_user
+    set -f directory_color (set_color red)
+  end
+
   if set -q SSH_CONNECTION
     set host_prefix (printf '%s%s:%s' $hostname_color (hostname -s) $directory_color)
+  else if set -q SUDO_USER; and command who | string match -q --regex "$SUDO_USER"'.*\\((([0-9]+\\.){3}[0-9]+|(([0-9a-fA-F]{1,4}(:[0-9a-fA-F]{1,4}){7})|((([0-9a-fA-F]{1,4}:){1,6}|:)((:[0-9a-fA-F]{1,4}){1,6}|:))))\\)'
+    set host_prefix (printf '%s%s#%s' $hostname_color (hostname -s) $directory_color)
   end
 
   if test $last_command_status -eq 0
