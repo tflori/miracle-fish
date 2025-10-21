@@ -25,8 +25,13 @@ function fish_prompt
   set -f error_color      (set_color $fish_color_error 2> /dev/null; or set_color red --bold)
   set -f directory_color  (set_color $fish_color_quote 2> /dev/null; or set_color brown)
   set -f repository_color (set_color $fish_color_cwdo 2> /dev/null; or set_color green)
+  set -f hostname_color   (set_color cyan --bold)
   set -f flag_color (set_color red --dim)
 
+  set -f host_prefix ""
+  if set -q SSH_CONNECTION
+    set host_prefix (printf '%s%s:%s' $hostname_color (hostname -s) $directory_color)
+  end
 
   if test $last_command_status -eq 0
     set -f status_color $success_color
@@ -43,7 +48,7 @@ function fish_prompt
       set -f cwd (echo $PWD | sed -e "s|$parent_root_folder/||")
     end
 
-    echo -n -s "[ " $directory_color $cwd $normal_color " ]"
+    echo -n -s "[ " $directory_color $host_prefix$cwd $normal_color " ]"
 
     echo -n -s $repository_color "  "
 
@@ -58,7 +63,7 @@ function fish_prompt
       echo -n $dirty
     end
   else
-    echo -n -s "[ " $directory_color $cwd $normal_color " ]"
+    echo -n -s "[ " $directory_color $host_prefix$cwd $normal_color " ]"
   end
 
   #echo -n -s -e "\n$status_color╰❯$normal_color "
