@@ -29,9 +29,9 @@ function fish_prompt
   set -f flag_color (set_color red --dim)
 
   set -f host_prefix ""
-  if set -q SSH_CONNECTION
-    set host_prefix (printf '%s%s:%s' $hostname_color (hostname -s) $directory_color)
-  end
+  if set -q SSH_CONNECTION
+    set host_prefix (printf '%s%s:%s' $hostname_color (hostname -s) $directory_color)
+  end
 
   if test $last_command_status -eq 0
     set -f status_color $success_color
